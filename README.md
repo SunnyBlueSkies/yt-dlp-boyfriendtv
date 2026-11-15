@@ -164,12 +164,67 @@ boyfriendtv-ytdlp/
   README.md                       this file
 ```
 
+## YTDLnis (Android) — using the `cmds` folder
+
+YTDLnis has a built-in Terminal (bash) with `git`, `python`, `pip` and
+`yt-dlp` ready to use. The most reliable install is the Terminal, one
+command at a time (do **not** paste the whole block at once — the app's
+command box will treat every word as a URL):
+
+```bash
+git clone https://github.com/SunnyBlueSkies/yt-dlp-boyfriendtv
+cd yt-dlp-boyfriendtv
+pip install .
+```
+
+That installs the plugin into the Python YTDLnis's yt-dlp uses, and it is
+then loaded automatically for every download. No template needed.
+
+**Using a command template instead (the `cmds` folder).** The `cmds`
+folder holds YTDLnis command templates — saved sets of extra yt-dlp
+arguments that get appended to a download. You can make one that loads
+this plugin without installing it:
+
+1. Get the plugin files on the phone first (`git clone` the repo, or
+   download the ZIP from GitHub and extract it). Suppose it lands at
+   `.../Yt-dlp/yt-dlp-boyfriendtv/` (which contains `yt_dlp_plugins/`).
+2. In YTDLnis, create a command template named e.g. `BoyfriendTV` whose
+   content is:
+
+```text
+--plugin-dirs .../Yt-dlp
+```
+
+   Point it at the folder that **contains** the `yt-dlp-boyfriendtv`
+   folder — i.e. the **parent** of the repo, not the repo itself.
+   (`--plugin-dirs` looks at the children of the directory you give it
+   for a `yt_dlp_plugins` package, so the parent is the correct level.
+   Verified: `--plugin-dirs <repo>` alone does not load it;
+   `--plugin-dirs <parent of repo>` does.)
+3. Enable that template as an extra command for video (and for data
+   fetching, so the format list loads too). Then paste a boyfriendtv URL
+   normally and pick a format.
+
+**How to tell the plugin is loaded.** Do **not** use
+`yt-dlp --list-extractors | grep -i boyfriend` — that list does not
+include plugin extractors, so it shows nothing even when the plugin is
+working. The real test is:
+
+```bash
+yt-dlp -F "https://www.boyfriendtv.org/videos/1273129/justcumoverme-16/"
+```
+
+If it lists the four `hls-*` formats (240p / 480p / 720p / 1080p), the
+plugin is loaded. If it says `Unsupported URL`, the plugin is not
+loaded — re-check the install or the `--plugin-dirs` parent path.
+
 ## Troubleshooting
 
-- **`Unsupported URL` still appears.** The plugin is not loaded. Check
-  `yt-dlp --list-extractors | grep -i boyfriend` — it should print
-  `boyfriendtv`. If it does not, the plugin is not in a directory yt-dlp
-  searches (Option A or C, or the right `--plugin-dirs`).
+- **`Unsupported URL` still appears.** The plugin is not loaded. Test
+  with `yt-dlp -F "<a boyfriendtv.org page>"` — it should list the four
+  `hls-*` formats. If it says `Unsupported URL`, the plugin is not in a
+  directory yt-dlp searches (Option A or C, or the right `--plugin-dirs`
+  parent path — see the YTDLnis section above).
 - **403 on a stream URL.** You are using a stream URL captured earlier.
   Signed URLs expire. Re-extract from the page URL instead.
 - **Only one format listed.** The page exposed a single variant, or the
