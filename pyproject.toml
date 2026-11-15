@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "yt-dlp-boyfriendtv"
+version = "1.0.0"
+description = "yt-dlp extractor plugin for boyfriendtv.org"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.8"
+dependencies = ["yt-dlp"]
+
+[project.entry-points."yt_dlp_plugins.extractor"]
+boyfriendtv = "yt_dlp_plugins.extractor.boyfriendtv:BoyfriendTVIE"
+
+[tool.setuptools]
+packages = ["yt_dlp_plugins", "yt_dlp_plugins.extractor"]
